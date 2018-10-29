@@ -10,7 +10,7 @@ from pyspark.sql import SQLContext
 from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.classification import LogisticRegressionModel
 
-conf = SparkConf().setAppName("banking-linear-regression-Inference")
+conf = SparkConf().setAppName("banking-linear-regression-Test")
 sc = SparkContext(conf=conf)
 sqlContext = SQLContext(sc)
 

@@ -1,10 +1,20 @@
+
+# coding: utf-8
+
+# In[1]:
+
+
 from pyspark.sql import SparkSession
-spark = SparkSession.builder.appName('ml-bank').getOrCreate()
+spark = SparkSession.builder.appName('ml-bank-input-spark-pipeline').getOrCreate()
 df = spark.read.csv('s3://vl2-dlk/data-banking-demo/bank.csv', header = True, inferSchema = True)
 #df.printSchema()
 
 df = df.select('age', 'job', 'marital', 'education', 'default', 'balance', 'housing', 'loan', 'contact', 'duration', 'campaign', 'pdays', 'previous', 'poutcome', 'deposit')
 cols = df.columns
+
+
+# In[2]:
+
 
 from pyspark.ml.feature import OneHotEncoderEstimator, StringIndexer, VectorAssembler
 
@@ -21,6 +31,10 @@ assemblerInputs = [c + "classVec" for c in categoricalColumns] + numericCols
 assembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
 stages += [assembler]
 
+
+# In[ ]:
+
+
 from pyspark.ml import Pipeline
 
 pipeline = Pipeline(stages = stages)
@@ -30,3 +44,4 @@ selectedCols = ['label', 'features'] + cols
 df = df.select(selectedCols)
 
 df.write.mode("Append").parquet("s3://vl2-dlk/data-banking-demo/banking-input")
+
