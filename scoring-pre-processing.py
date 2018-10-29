@@ -56,15 +56,15 @@ y_val=validate.iloc[:,:1];
 ###### Standarization ###############################
 print("Start StandardScaler")
 
-#e=StandardScaler()
+e=StandardScaler()
 
-#x_train= e.fit_transform(x_train)
-#x_val= e.transform(x_val)
+x_train= e.fit_transform(x_train)
+x_val= e.transform(x_val)
 
 
-#filehandler = open("/stdscaler.obj","wb")
-#pickle.dump(e,filehandler)
-#filehandler.close()
+filehandler = open("/stdscaler.obj","wb")
+pickle.dump(e,filehandler)
+filehandler.close()
 
 print("End StandardScaler")
 #####################################################################
@@ -72,31 +72,12 @@ print("End StandardScaler")
 
 # In[11]:
 
-
-import s3fs
-
-data_path= 's3://vl2-dlk/data-banking-demo/'
-
-Access_Key = 'AKIAITG62SZQZTTUYVNQ'
-Access_Secret_Key = '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'
-
-
 x_train_df=pd.DataFrame(x_train)
-#x_train_df.to_csv("s3://vl2-dlk/data-banking-demo/x_train_df.csv")
-
-bytes_to_write = x_train_df.to_csv(None,sep=';', index=False, header=False).encode()
-fs = s3fs.S3FileSystem(key=Access_Key, secret=Access_Secret_Key)
-with fs.open(data_path + 'x_train_df.csv' , 'wb') as f:
-    f.write(bytes_to_write)
+x_train_df.to_csv("./x_train_df.csv")
 
 x_val_df=pd.DataFrame(x_val)
-#x_val_df.to_csv("./x_val_df.csv")
-with fs.open(data_path + 'x_val_df.csv' , 'wb') as f:
-    f.write(bytes_to_write)
+x_val_df.to_csv("./x_val_df.csv")
 
-with fs.open(data_path + 'y_train.csv' , 'wb') as f:
-    f.write(bytes_to_write)
-    
-with fs.open(data_path + 'y_val.csv' , 'wb') as f:
-    f.write(bytes_to_write) 
+y_train.to_csv("./y_train.csv")
+y_val.to_csv("./y_val.csv")
 
